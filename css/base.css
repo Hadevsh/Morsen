@@ -1,0 +1,23 @@
+:root {
+    --color-text: #FFFFFF;
+    --color-text-muted: #BBBBBB;
+    --color-border: #2C2C2C;
+    --color-error: #FF5252;
+
+    /* Main background color */
+    --color-background: #121212;
+
+    /* Panel/box background */
+    --color-surface: #1E1E1E;
+
+    /* Accent colors (buttons, links) */
+    --color-primary: #00BCD4;
+
+    /* Subtle highlights */
+    --color-secondary: #03DAC6;
+}
+
+* {
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
