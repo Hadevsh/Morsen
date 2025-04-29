@@ -17,3 +17,23 @@
 .straight-paddle p {
     color: var(--color-text-muted);
 }
+
+input[type=number] {
+    width: 2rem;
+    height: 0.5rem;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.settings {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}

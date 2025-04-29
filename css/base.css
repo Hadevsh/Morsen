@@ -55,7 +55,6 @@ input {
     background-color: var(--color-surface);
     border-radius: 0.2rem;
     padding: 0.5rem;
-    cursor: pointer;
     transition: background-color 0.3s;
 }
 
