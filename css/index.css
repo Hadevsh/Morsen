@@ -19,7 +19,8 @@
 }
 
 input[type=number] {
-    width: 2rem;
+    font-size: 1rem;
+    width: 1.2rem;
     height: 0.5rem;
     appearance: textfield;
     -moz-appearance: textfield;

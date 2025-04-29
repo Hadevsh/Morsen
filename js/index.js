@@ -17,10 +17,15 @@ function playTone(duration = 100) {
 
 const ditKey = document.getElementById("dit");
 const dahKey = document.getElementById("dah");
+const WPM = document.getElementById("wpm"); // Words per minute (paddle)
 
-let WPM = 20; // Words per minute (paddle)
+let WPMval = WPM.value;
 let ditDuration = 1200 / WPM; // 1 unit
 let dahDuration = ditDuration * 3; // 3 units
+
+WPM.addEventListener("change", () => {
+    WPMval = document.getElementById("wpm").value;
+})
 
 ditKey.addEventListener("click", () => {
     playTone(ditDuration);
