@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
+
 :root {
     --color-text: #FFFFFF;
     --color-text-muted: #BBBBBB;
@@ -18,6 +20,7 @@
 }
 
 * {
+    font-family: "Funnel Display", sans-serif;
     color: var(--color-text);
     background-color: var(--color-background);
 }
