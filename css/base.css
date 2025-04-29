@@ -49,6 +49,20 @@ button:hover {
     background-color: var(--color-surface-lighter);
 }
 
+input {
+    outline: none;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input:focus {
+    background-color: var(--color-surface-lighter);
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
