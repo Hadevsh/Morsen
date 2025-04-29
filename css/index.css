@@ -2,3 +2,18 @@
     width: 9rem;
     font-size: 3rem;
 }
+
+.key-mode {
+    margin: 0;
+}
+
+.straight-paddle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.straight-paddle p {
+    color: var(--color-text-muted);
+}
