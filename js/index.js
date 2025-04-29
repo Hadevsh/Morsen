@@ -1,5 +1,5 @@
 const keyMode = document.getElementById("key-mode");
-let keyModeBin = 0; // 0 - straight, 1 - paddle
+let keyModeBin = false; // false - straight, true - paddle
 
 keyMode.addEventListener("click", () => {
     keyModeBin = !keyModeBin;
@@ -38,8 +38,10 @@ dahKey.addEventListener("click", () => {
 let oscillator = null;
 let keyDownTime = 0;
 
+console.log()
+
 document.addEventListener("keydown", function(event) {
-    if (keyModeBin === 0 && (event.key === " " || event.key === "Spacebar")) {
+    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
         if (!oscillator) {
             // Start tone on keydown
             oscillator = audioCtx.createOscillator();
@@ -53,7 +55,7 @@ document.addEventListener("keydown", function(event) {
 });
 
 document.addEventListener("keyup", function(event) {
-    if (keyModeBin === 0 && (event.key === " " || event.key === "Spacebar")) {
+    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
         if (oscillator) {
             oscillator.stop();
             oscillator.disconnect();
