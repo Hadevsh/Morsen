@@ -20,17 +20,50 @@ const dahKey = document.getElementById("dah");
 const WPM = document.getElementById("wpm"); // Words per minute (paddle)
 
 let WPMval = WPM.value;
-let ditDuration = 1200 / WPM; // 1 unit
+let ditDuration = 1200 / WPMval; // 1 unit
 let dahDuration = ditDuration * 3; // 3 units
 
 WPM.addEventListener("change", () => {
     WPMval = document.getElementById("wpm").value;
-})
+});
 
 ditKey.addEventListener("click", () => {
     playTone(ditDuration);
-})
+});
 
 dahKey.addEventListener("click", () => {
     playTone(dahDuration);
-})
+});
+
+let oscillator = null;
+let keyDownTime = 0;
+
+document.addEventListener("keydown", function(event) {
+    if (keyModeBin === 0 && (event.key === " " || event.key === "Spacebar")) {
+        if (!oscillator) {
+            // Start tone on keydown
+            oscillator = audioCtx.createOscillator();
+            oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+            keyDownTime = performance.now(); // Record time for duration if needed
+        }
+        event.preventDefault(); // Prevent page scroll
+    }
+});
+
+document.addEventListener("keyup", function(event) {
+    if (keyModeBin === 0 && (event.key === " " || event.key === "Spacebar")) {
+        if (oscillator) {
+            oscillator.stop();
+            oscillator.disconnect();
+            oscillator = null;
+
+            const keyUpTime = performance.now();
+            const duration = keyUpTime - keyDownTime;
+
+            // Optional: log or use duration to detect dit vs dah
+            console.log(`Straight key duration: ${duration.toFixed(0)} ms`);
+        }
+    }
+});
