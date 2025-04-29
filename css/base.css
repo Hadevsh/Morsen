@@ -11,6 +11,7 @@
 
     /* Panel/box background */
     --color-surface: #1E1E1E;
+    --color-surface-lighter: #2B2B2B;
 
     /* Accent colors (buttons, links) */
     --color-primary: #00BCD4;
@@ -32,4 +33,18 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+button {
+    outline: none;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--color-surface-lighter);
 }
