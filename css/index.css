@@ -38,3 +38,8 @@ input::-webkit-inner-spin-button {
     gap: 0.5rem;
     align-items: center;
 }
+
+#input {
+    font-style: italic;
+    color: var(--color-text-muted)
+}
