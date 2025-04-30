@@ -11,6 +11,16 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+    <h1 class="title">Morsen</h1>
+
+    <div class="info">
+        <h2>Morse Code Spacing</h2>
+        <p>• dit: 1 unit</p>
+        <p>− dah: 3 units</p>
+        <p>Space between letters in a word is three times the duration of a dit, equivalent to the length of a dah.</p>
+        <p>Between words, the space is seven times the duration of a dit.</p>
+    </div>
+
     <!-- Rounded switch -->
     <p class="key-mode">Key Mode</p>
     <div class="straight-paddle">
@@ -26,10 +36,8 @@
         <input type="number" id="wpm" name="WPM" value="20" max="50" min="1">
     </div>
 
-    <h1 class="title">Morsen</h1>
-
     <!-- Decoded dits and dahs -->
-    <p id="output">Send to see translation.</p>
+    <p id="output">Start sending Morse to see translation.</p>
     <!-- Dits and dahs send by user -->
     <p id="input">Dit ..dit</p> 
 

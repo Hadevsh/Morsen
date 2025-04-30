@@ -32,7 +32,7 @@ WPM.addEventListener("change", () => {
 
 let keyerDown = 0;
 let keyerUp = 0;
-let resetInteval = 1200; // 1 unit between characters (but stay 1200 because to fast)
+let resetInteval = 1200; // 3 units between characters (but stay 1200 because to fast)
 
 ditKey.addEventListener("click", () => {
     keyerUp = performance.now();

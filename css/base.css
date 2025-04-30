@@ -23,7 +23,6 @@
 * {
     font-family: "Funnel Display", sans-serif;
     color: var(--color-text);
-    background-color: var(--color-background);
 }
 
 html, body {
@@ -33,6 +32,8 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+    background-color: var(--color-background);
 }
 
 button {
