@@ -75,5 +75,6 @@ input::-webkit-inner-spin-button {
 
 #input {
     font-style: italic;
-    color: var(--color-text-muted)
+    color: var(--color-text-muted);
+    height: 1rem;
 }

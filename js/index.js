@@ -35,20 +35,14 @@ let keyerUp = 0;
 let resetInteval = 1200; // 3 units between characters (but stay 1200 because to fast)
 
 ditKey.addEventListener("click", () => {
-    keyerUp = performance.now();
-    if (userInput.innerHTML === "Dit ..dit" || (keyerUp-keyerDown) >= resetInteval) { 
-        userInput.innerHTML = ``;
-    }
-    userInput.innerHTML += `•`;
     playTone(ditDuration);
+    queueMorse("•");
     keyerDown = performance.now();
 });
 
 dahKey.addEventListener("click", () => {
-    keyerUp = performance.now();
-    if (userInput.innerHTML === "Dit ..dit" || (keyerUp-keyerDown) >= resetInteval) { userInput.innerHTML = `` }
-    userInput.innerHTML += `−`;
     playTone(dahDuration);
+    queueMorse("−");
     keyerDown = performance.now();
 });
 
@@ -86,3 +80,36 @@ document.addEventListener("keyup", function(event) {
         }
     }
 });
+
+const morseToChar = {
+    "•−": "A",   "−•••": "B", "−•−•": "C", "−••": "D",  "•": "E",
+    "••−•": "F", "−−•": "G",  "••••": "H", "••": "I",   "•−−−": "J",
+    "−•−": "K",  "•−••": "L", "−−": "M",   "−•": "N",   "−−−": "O",
+    "•−−•": "P", "−−•−": "Q", "•−•": "R",  "•••": "S",  "−": "T",
+    "••−": "U",  "•••−": "V", "•−−": "W",  "−••−": "X", "−•−−": "Y",
+    "−−••": "Z",
+    "•−−−−": "1", "••−−−": "2", "•••−−": "3", "••••−": "4", "•••••": "5",
+    "−••••": "6", "−−•••": "7", "−−−••": "8", "−−−−•": "9", "−−−−−": "0"
+};
+
+const output = document.getElementById("output");
+
+let currentMorse = "";
+let currentOut = "";
+let decodeTimer = null;
+
+function queueMorse(symbol) {
+    // Append the new symbol to the buffer
+    currentMorse += symbol;
+    userInput.innerHTML = currentMorse;
+
+    // Reset and restart the decode timer
+    clearTimeout(decodeTimer);
+    decodeTimer = setTimeout(() => {
+        const decodedChar = morseToChar[currentMorse] || "�"; // fallback for unknown
+        currentOut += decodedChar;
+        output.innerHTML = currentOut;
+        currentMorse = "";
+        userInput.innerHTML = "";
+    }, resetInteval); // wait to decode until no input for 1200ms
+}
