@@ -102,7 +102,7 @@ document.addEventListener("keyup", function (event) {
             const duration = keyUpTime - keyDownTime;
             const symbol = duration < ditDahThreshold ? "•" : "−";
 
-            playTone(duration);
+            // playTone(duration);
             queueMorse(symbol);
 
             console.log(`Key duration: ${duration.toFixed(0)} ms → ${symbol}`);
