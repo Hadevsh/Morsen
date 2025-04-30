@@ -3,13 +3,13 @@ let keyModeBin = false; // false - straight, true - paddle
 
 keyMode.addEventListener("click", () => {
     keyModeBin = !keyModeBin;
-    console.log(keyModeBin);
-})
+    console.log("Mode:", keyModeBin ? "Paddle" : "Straight");
+});
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playTone(duration = 100) {
     const oscillator = audioCtx.createOscillator();
-    oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // 600Hz tone
+    oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
     oscillator.connect(audioCtx.destination);
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + duration / 1000);
@@ -17,68 +17,21 @@ function playTone(duration = 100) {
 
 const ditKey = document.getElementById("dit");
 const dahKey = document.getElementById("dah");
-const WPM = document.getElementById("wpm"); // Words per minute (paddle)
+const WPM = document.getElementById("wpm");
 const userInput = document.getElementById("input");
+const output = document.getElementById("output");
 
 let WPMval = WPM.value;
-let ditDuration = 1200 / WPMval; // 1 unit
-let dahDuration = ditDuration * 3; // 3 units
+let ditDuration = 1200 / WPMval;
+let dahDuration = ditDuration * 3;
+let resetInterval = 1200; // 3 unit pause for character separation
+let ditDahThreshold = ditDuration * 1.5;
 
 WPM.addEventListener("change", () => {
-    WPMval = document.getElementById("wpm").value;
-    ditDuration = 1200 / WPMval; // 1 unit
-    dahDuration = ditDuration * 3; // 3 units
-});
-
-let keyerDown = 0;
-let keyerUp = 0;
-let resetInteval = 1200; // 3 units between characters (but stay 1200 because to fast)
-
-ditKey.addEventListener("click", () => {
-    playTone(ditDuration);
-    queueMorse("•");
-    keyerDown = performance.now();
-});
-
-dahKey.addEventListener("click", () => {
-    playTone(dahDuration);
-    queueMorse("−");
-    keyerDown = performance.now();
-});
-
-let oscillator = null;
-let keyDownTime = 0;
-
-console.log()
-
-document.addEventListener("keydown", function(event) {
-    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
-        if (!oscillator) {
-            // Start tone on keydown
-            oscillator = audioCtx.createOscillator();
-            oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
-            oscillator.connect(audioCtx.destination);
-            oscillator.start();
-            keyDownTime = performance.now(); // Record time for duration if needed
-        }
-        event.preventDefault(); // Prevent page scroll
-    }
-});
-
-document.addEventListener("keyup", function(event) {
-    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
-        if (oscillator) {
-            oscillator.stop();
-            oscillator.disconnect();
-            oscillator = null;
-
-            const keyUpTime = performance.now();
-            const duration = keyUpTime - keyDownTime;
-
-            // Optional: log or use duration to detect dit vs dah
-            console.log(`Straight key duration: ${duration.toFixed(0)} ms`);
-        }
-    }
+    WPMval = WPM.value;
+    ditDuration = 1200 / WPMval;
+    dahDuration = ditDuration * 3;
+    ditDahThreshold = ditDuration * 1.5;
 });
 
 const morseToChar = {
@@ -92,24 +45,67 @@ const morseToChar = {
     "−••••": "6", "−−•••": "7", "−−−••": "8", "−−−−•": "9", "−−−−−": "0"
 };
 
-const output = document.getElementById("output");
-
 let currentMorse = "";
 let currentOut = "";
 let decodeTimer = null;
 
 function queueMorse(symbol) {
-    // Append the new symbol to the buffer
     currentMorse += symbol;
     userInput.innerHTML = currentMorse;
 
-    // Reset and restart the decode timer
     clearTimeout(decodeTimer);
     decodeTimer = setTimeout(() => {
-        const decodedChar = morseToChar[currentMorse] || "�"; // fallback for unknown
+        const decodedChar = morseToChar[currentMorse] || "�";
         currentOut += decodedChar;
         output.innerHTML = currentOut;
         currentMorse = "";
         userInput.innerHTML = "";
-    }, resetInteval); // wait to decode until no input for 1200ms
+    }, resetInterval);
 }
+
+// Button click support (Paddle mode)
+ditKey.addEventListener("click", () => {
+    playTone(ditDuration);
+    queueMorse("•");
+});
+
+dahKey.addEventListener("click", () => {
+    playTone(dahDuration);
+    queueMorse("−");
+});
+
+// Straight keying (Spacebar)
+let oscillator = null;
+let keyDownTime = 0;
+
+document.addEventListener("keydown", function (event) {
+    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
+        if (!oscillator) {
+            oscillator = audioCtx.createOscillator();
+            oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+            oscillator.connect(audioCtx.destination);
+            oscillator.start();
+            keyDownTime = performance.now();
+        }
+        event.preventDefault();
+    }
+});
+
+document.addEventListener("keyup", function (event) {
+    if (keyModeBin === false && (event.key === " " || event.key === "Spacebar")) {
+        if (oscillator) {
+            oscillator.stop();
+            oscillator.disconnect();
+            oscillator = null;
+
+            const keyUpTime = performance.now();
+            const duration = keyUpTime - keyDownTime;
+            const symbol = duration < ditDahThreshold ? "•" : "−";
+
+            playTone(duration);
+            queueMorse(symbol);
+
+            console.log(`Key duration: ${duration.toFixed(0)} ms → ${symbol}`);
+        }
+    }
+});
