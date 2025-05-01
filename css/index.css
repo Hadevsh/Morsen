@@ -76,5 +76,12 @@ input::-webkit-inner-spin-button {
 #input {
     font-style: italic;
     color: var(--color-text-muted);
-    height: 1rem;
+    height: 1rem;    
+}
+
+#character-spacing {
+    height: 0.1rem;
+    width: 15rem;
+    background-color: var(--color-border);
+    transition: width linear;
 }

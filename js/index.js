@@ -25,7 +25,7 @@ let WPMval = WPM.value;
 let ditDuration = 1200 / WPMval;
 let dahDuration = ditDuration * 3;
 let resetInterval = 1200; // 3 unit pause for character separation
-let ditDahThreshold = ditDuration * 1.5;
+let ditDahThreshold = ditDuration * 2;
 
 WPM.addEventListener("change", () => {
     WPMval = WPM.value;
@@ -54,6 +54,8 @@ function queueMorse(symbol) {
     userInput.innerHTML = currentMorse;
 
     clearTimeout(decodeTimer);
+    startCharacterSpacingBar(resetInterval); // Visualize spacing timer
+
     decodeTimer = setTimeout(() => {
         const decodedChar = morseToChar[currentMorse] || "�";
         currentOut += decodedChar;
@@ -109,3 +111,15 @@ document.addEventListener("keyup", function (event) {
         }
     }
 });
+
+function startCharacterSpacingBar(duration) {
+    const bar = document.getElementById("character-spacing");
+    bar.style.transition = "none"; // Reset transition
+    bar.style.width = "15rem";     // Reset width instantly
+
+    // Trigger reflow to apply the reset before animating again
+    void bar.offsetWidth;
+
+    bar.style.transition = `width ${duration}ms linear`;
+    bar.style.width = "0rem"; // Animate to 0 over duration
+}
