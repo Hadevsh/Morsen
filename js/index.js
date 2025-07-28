@@ -24,7 +24,7 @@ const output = document.getElementById("output");
 let WPMval = WPM.value;
 let ditDuration = 1200 / WPMval;
 let dahDuration = ditDuration * 3;
-let resetInterval = 1200; // 3 unit pause for character separation
+let resetInterval = 1200 * (1 / (WPMval / 10)); // 3 unit pause for character separation
 let ditDahThreshold = ditDuration * 2;
 
 WPM.addEventListener("change", () => {
@@ -32,6 +32,7 @@ WPM.addEventListener("change", () => {
     ditDuration = 1200 / WPMval;
     dahDuration = ditDuration * 3;
     ditDahThreshold = ditDuration * 1.5;
+    resetInterval = 1200 * (1 / (WPMval / 10)); // Modified by WPM val
 });
 
 const morseToChar = {
