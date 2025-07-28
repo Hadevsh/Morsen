@@ -124,3 +124,12 @@ function startCharacterSpacingBar(duration) {
     bar.style.transition = `width ${duration}ms linear`;
     bar.style.width = "0rem"; // Animate to 0 over duration
 }
+
+const backspace_btn = document.getElementById("backspace");
+backspace_btn.addEventListener("click", () => {
+    console.log('back');
+    output.innerHTML = output.innerText.slice(0, output.innerText.length - 1);
+    if (output.innerText == "") {
+        output.innerHTML = `Start sending Morse...`;
+    }
+})
