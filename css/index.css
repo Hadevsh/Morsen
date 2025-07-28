@@ -23,13 +23,17 @@
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 1rem;
-    padding: 2rem;
+    padding: 1.7rem;
     max-width: 50vw;
     margin: 1rem;
 }
 
 .info p, .info h2 {
-    margin: 0.2rem;
+    margin: 0.3rem;
+}
+
+.info h2 {
+    margin-bottom: 1rem;
 }
 
 #backspace {
