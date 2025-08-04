@@ -34,11 +34,6 @@ let dahDuration = ditDuration * 3;
 let resetInterval = 1200 * (1 / (WPMval / 10)); // 3 unit pause for character separation
 let ditDahThreshold = ditDuration * 2;
 
-// WPM display
-WPM.addEventListener("input", () => {
-    document.getElementById("wpm-value").textContent = WPM.value + " WPM";
-});
-
 WPM.addEventListener("change", () => {
     WPMval = WPM.value;
     ditDuration = 1200 / WPMval;
@@ -78,13 +73,11 @@ function queueMorse(symbol) {
     }, resetInterval);
 }
 
-// Button click support (Paddle mode)
+// Button click support (Every mode)
 ditKey.addEventListener("mousedown", () => {
-    if (keyModeBin) {
-        playTone(ditDuration);
-        queueMorse("•");
-        ditKey.classList.add("active");
-    }
+    playTone(ditDuration);
+    queueMorse("•");
+    ditKey.classList.add("active");
 });
 
 ditKey.addEventListener("mouseup", () => {
@@ -92,11 +85,9 @@ ditKey.addEventListener("mouseup", () => {
 });
 
 dahKey.addEventListener("mousedown", () => {
-    if (keyModeBin) {
-        playTone(dahDuration);
-        queueMorse("−");
-        dahKey.classList.add("active");
-    }
+    playTone(dahDuration);
+    queueMorse("−");
+    dahKey.classList.add("active");
 });
 
 dahKey.addEventListener("mouseup", () => {
