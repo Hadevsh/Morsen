@@ -4,6 +4,13 @@ let keyModeBin = false; // false - straight, true - paddle
 keyMode.addEventListener("click", () => {
     keyModeBin = !keyModeBin;
     console.log("Mode:", keyModeBin ? "Paddle" : "Straight");
+    
+    // Show current mode
+    if (keyModeBin) {
+        keyMode.textContent = "Switch to Straight Key";
+    } else {
+        keyMode.textContent = "Switch to Paddle";
+    }
 });
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -27,12 +34,17 @@ let dahDuration = ditDuration * 3;
 let resetInterval = 1200 * (1 / (WPMval / 10)); // 3 unit pause for character separation
 let ditDahThreshold = ditDuration * 2;
 
+// WPM display
+WPM.addEventListener("input", () => {
+    document.getElementById("wpm-value").textContent = WPM.value + " WPM";
+});
+
 WPM.addEventListener("change", () => {
     WPMval = WPM.value;
     ditDuration = 1200 / WPMval;
     dahDuration = ditDuration * 3;
     ditDahThreshold = ditDuration * 1.5;
-    resetInterval = 1200 * (1 / (WPMval / 10)); // Modified by WPM val
+    resetInterval = 1200 * (1 / (WPMval / 10));
 });
 
 const morseToChar = {
@@ -55,7 +67,7 @@ function queueMorse(symbol) {
     userInput.innerHTML = currentMorse;
 
     clearTimeout(decodeTimer);
-    startCharacterSpacingBar(resetInterval); // Visualize spacing timer
+    startCharacterSpacingBar(resetInterval);
 
     decodeTimer = setTimeout(() => {
         const decodedChar = morseToChar[currentMorse] || "�";
@@ -67,14 +79,28 @@ function queueMorse(symbol) {
 }
 
 // Button click support (Paddle mode)
-ditKey.addEventListener("click", () => {
-    playTone(ditDuration);
-    queueMorse("•");
+ditKey.addEventListener("mousedown", () => {
+    if (keyModeBin) {
+        playTone(ditDuration);
+        queueMorse("•");
+        ditKey.classList.add("active");
+    }
 });
 
-dahKey.addEventListener("click", () => {
-    playTone(dahDuration);
-    queueMorse("−");
+ditKey.addEventListener("mouseup", () => {
+    ditKey.classList.remove("active");
+});
+
+dahKey.addEventListener("mousedown", () => {
+    if (keyModeBin) {
+        playTone(dahDuration);
+        queueMorse("−");
+        dahKey.classList.add("active");
+    }
+});
+
+dahKey.addEventListener("mouseup", () => {
+    dahKey.classList.remove("active");
 });
 
 // Straight keying (Spacebar)
@@ -92,6 +118,21 @@ document.addEventListener("keydown", function (event) {
         }
         event.preventDefault();
     }
+    
+    // Paddle mode key handlers
+    if (keyModeBin === true) {
+        if (event.key === ",") {
+            playTone(ditDuration);
+            queueMorse("•");
+            ditKey.classList.add("active");
+            event.preventDefault();
+        } else if (event.key === ".") {
+            playTone(dahDuration);
+            queueMorse("−");
+            dahKey.classList.add("active");
+            event.preventDefault();
+        }
+    }
 });
 
 document.addEventListener("keyup", function (event) {
@@ -105,31 +146,35 @@ document.addEventListener("keyup", function (event) {
             const duration = keyUpTime - keyDownTime;
             const symbol = duration < ditDahThreshold ? "•" : "−";
 
-            // playTone(duration);
             queueMorse(symbol);
-
             console.log(`Key duration: ${duration.toFixed(0)} ms → ${symbol}`);
+        }
+    }
+    
+    if (keyModeBin === true) {
+        if (event.key === "<") {
+            ditKey.classList.remove("active");
+            event.preventDefault();
+        } else if (event.key === ">") {
+            dahKey.classList.remove("active");
+            event.preventDefault();
         }
     }
 });
 
 function startCharacterSpacingBar(duration) {
     const bar = document.getElementById("character-spacing");
-    bar.style.transition = "none"; // Reset transition
-    bar.style.width = "15rem";     // Reset width instantly
-
-    // Trigger reflow to apply the reset before animating again
+    bar.style.transition = "none";
+    bar.style.width = "15rem";
     void bar.offsetWidth;
-
     bar.style.transition = `width ${duration}ms linear`;
-    bar.style.width = "0rem"; // Animate to 0 over duration
+    bar.style.width = "0rem";
 }
 
 const backspace_btn = document.getElementById("backspace");
 backspace_btn.addEventListener("click", () => {
-    console.log('back');
     output.innerHTML = output.innerText.slice(0, output.innerText.length - 1);
     if (output.innerText == "") {
         output.innerHTML = `Start sending Morse...`;
     }
-})
+});
