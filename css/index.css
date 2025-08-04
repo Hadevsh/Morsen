@@ -38,8 +38,9 @@
 
 #backspace {
     position: absolute;
-    left: calc(50% + 9.3rem); /* 50% for center + one button width + gap */
-    font-size: 1rem;
+    left: calc(50% + 9.4rem); /* 50% for center + one button width + gap */
+    font-size: 2.5rem;
+    width: fit-content;
 }
 
 .settings {
